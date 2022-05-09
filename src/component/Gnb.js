@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { Menu } from "semantic-ui-react";
 
 const colors = [
@@ -5,24 +6,35 @@ const colors = [
 ]
 
 export default function Gnb(){
-    const activeItem = "home";
+    const router = useRouter();
+    
+    let activeItem;
+
+    if(router.pathname === "/"){
+      activeItem = "home";
+    }else if(router.pathname === "/") {
+      activeItem = "about";
+    }
+
+    const goLink = (e, data) => {
+      if(data.name === 'home'){
+        router.push('/')
+      }else if (data.name === 'about'){
+        router.push('/about')
+      }
+    }
 
     return (
         <Menu color={'pink'} inverted>
         <Menu.Item
           name='home'
           active={activeItem === 'home'}
-          //onClick={this.handleItemClick}
+          onClick={goLink}
         />
         <Menu.Item
-          name='messages'
-          active={activeItem === 'messages'}
-          //onClick={this.handleItemClick}
-        />
-        <Menu.Item
-          name='friends'
-          active={activeItem === 'friends'}
-          //onClick={this.handleItemClick}
+          name='about'
+          active={activeItem === 'about'}
+          onClick={goLink}
         />
       </Menu>
     );
