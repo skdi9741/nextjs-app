@@ -22,9 +22,22 @@ const View = ({item, name}) => {
     </>
   );
 };
+
 export default View;
 
-export async function getServerSideProps(context){
+export async function getStaticPaths(){
+  return {
+    paths : [
+      { params : {id : '740' }},
+      { params : {id : '730' }},
+      { params : {id : '729' }},
+    ],
+    fallback: true
+  };
+}
+
+
+export async function getStaticProps(context){
   const id = context.params.id;
   const apiUrl = `https://makeup-api.herokuapp.com/api/v1/products/${id}.json`;
   const res = await Axios.get(apiUrl);
