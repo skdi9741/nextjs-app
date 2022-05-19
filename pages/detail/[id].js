@@ -3,10 +3,18 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Item from "../../src/component/Item";
-
+import LoaderComponent from "../../src/component/LoaderComponent";
 
 const View = ({item, name}) => {
-  console.log(item, name)
+  const router = useRouter();
+
+  if(router.isFallback){
+    return (
+      <div style={{padding : "100px 0"}}>
+        <LoaderComponent />
+      </div>
+    )
+  }
   return (
     <>
       {item && (
@@ -26,12 +34,22 @@ const View = ({item, name}) => {
 export default View;
 
 export async function getStaticPaths(){
+  const apiUrl = process.env.apiUrl;
+  const res = await Axios.get(apiUrl)
+  const data = res.data;
+
   return {
-    paths : [
-      { params : {id : '740' }},
-      { params : {id : '730' }},
-      { params : {id : '729' }},
-    ],
+
+    //paths : [
+    //  { params : {id : '740' }},
+    //  { params : {id : '730' }},
+    //  { params : {id : '729' }},
+    //],
+    paths : data.map((item) => ({
+      params : {
+        id : (item.id).toString()
+      }
+    })),
     fallback: true
   };
 }
